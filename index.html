@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Futuristic AI Sports telemetry Dashboard. Year 2035 Cricket Scoreboard command center.">
+    <title>LIVE SCORE | AI Sports Operating System v4.8</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body data-theme="cyber-blue">
+
+    <!-- Holographic Glitch overlay for Wickets -->
+    <div id="glitch-overlay" class="glitch-overlay"></div>
+
+    <!-- Broadcast TV Graphics Ribbons Overlay -->
+    <div id="broadcast-ribbon-container" class="broadcast-ribbon-overlay"></div>
+
+    <!-- Laser Splash & Sparks Effects Layer -->
+    <canvas id="effects-canvas" class="effects-layer"></canvas>
+
+    <!-- Full-screen Futuristic stadium render canvas -->
+    <canvas id="bg-stadium-canvas" class="bg-canvas"></canvas>
+
+    <!-- HUD Overlay grid background lines -->
+    <div class="hud-grid-overlay"></div>
+
+    <div class="app-container">
+        
+        <!-- TOP NAV: AI OS TERMINAL CONTROL BAR -->
+        <header class="hud-header glass-panel">
+            <div class="hud-header-left">
+                <span class="system-status-indicator">●</span>
+                <span class="system-title">SYS_OS_v4.8</span>
+                <span class="latency-badge" id="hud-latency">LATENCY: 4ms</span>
+            </div>
+            
+            <div class="hud-header-center">
+                <h1 class="app-title" id="app-logo">LIVE SCORE</h1>
+                <span class="hud-coord">LAT: 12.9716° N / LON: 77.5946° E</span>
+            </div>
+            
+            <div class="hud-header-right">
+                <!-- Sound Deck Controls -->
+                <div class="sound-control-panel" title="System Audio Settings">
+                    <button class="sound-toggle-btn" id="btn-sound-toggle" title="Mute/Unmute Audio">
+                        <span id="sound-icon">🔊</span>
+                    </button>
+                    <input type="range" id="sound-volume-slider" min="0" max="1" step="0.05" value="0.5" class="hud-slider" title="Adjust Volume">
+                </div>
+
+                <!-- Theme Swapper Icons -->
+                <div class="theme-selector-hud" title="Change Visual Identity">
+                    <button class="theme-btn active" data-theme="cyber-blue" style="background:#00f2fe;" title="Cyber Blue"></button>
+                    <button class="theme-btn" data-theme="neon-purple" style="background:#fd2678;" title="Neon Purple"></button>
+                    <button class="theme-btn" data-theme="emerald-green" style="background:#10b981;" title="Emerald Green"></button>
+                    <button class="theme-btn" data-theme="solar-gold" style="background:#ffd700;" title="Solar Gold"></button>
+                    <button class="theme-btn" data-theme="midnight-black" style="background:#1f2833;" title="Midnight Black"></button>
+                    <button class="theme-btn" data-theme="arctic-white" style="background:#ffffff;" title="Arctic White"></button>
+                </div>
+                <div class="system-time-badge" id="system-time">12:00:00</div>
+            </div>
+        </header>
+
+        <!-- SCREEN 1: PRE-MATCH TEAM INITIALIZATION -->
+        <main class="screen active" id="setup-screen">
+            <div class="glass-panel setup-form hud-panel">
+                <div class="laser-scanner-line"></div>
+                <div class="panel-tag">INITIALIZE MATCH CONFIG</div>
+                
+                <!-- Team Inputs -->
+                <div class="form-row">
+                    <div class="input-group">
+                        <label class="input-label" for="team-a-input">HOME TEAM CODE</label>
+                        <input type="text" id="team-a-input" class="input-field" placeholder="IND" value="India" autocomplete="off" required>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" for="team-b-input">AWAY TEAM CODE</label>
+                        <input type="text" id="team-b-input" class="input-field" placeholder="AUS" value="Australia" autocomplete="off" required>
+                    </div>
+                </div>
+
+                <!-- Captain Inputs -->
+                <div class="form-row">
+                    <div class="input-group">
+                        <label class="input-label" for="captain-a-input">HOME CAPTAIN</label>
+                        <input type="text" id="captain-a-input" class="input-field" placeholder="Rohit" value="Rohit Sharma" autocomplete="off">
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" for="captain-b-input">AWAY CAPTAIN</label>
+                        <input type="text" id="captain-b-input" class="input-field" placeholder="Cummins" value="Pat Cummins" autocomplete="off">
+                    </div>
+                </div>
+
+                <!-- Match Overs -->
+                <div class="input-group">
+                    <label class="input-label" for="overs-input">TELEMETRY OVERS</label>
+                    <input type="number" id="overs-input" class="input-field" min="1" max="90" value="5" required>
+                </div>
+
+                <!-- Coin Toss Simulator Panel -->
+                <div class="coin-section">
+                    <div class="panel-tag" style="position:static; margin-bottom:8px;">TOSS SIMULATION DECK</div>
+                    
+                    <div class="toss-flex">
+                        <div class="coin-wrapper" id="coin-wrapper" title="Click to Flip Coin">
+                            <div class="coin" id="toss-coin">
+                                <div class="coin-side coin-front">HEADS</div>
+                                <div class="coin-side coin-back">TAILS</div>
+                            </div>
+                        </div>
+                        
+                        <div class="toss-results">
+                            <div class="toss-options-grid">
+                                <div class="toss-select-card" id="toss-winner-card">
+                                    <div class="toss-select-title">TOSS DECISION WINNER</div>
+                                    <div class="toss-select-value" id="toss-winner-display">-</div>
+                                </div>
+                                <div class="toss-select-card" id="toss-decision-card">
+                                    <div class="toss-select-title">DECISION RESULT</div>
+                                    <div class="toss-select-value" id="toss-decision-display">-</div>
+                                </div>
+                            </div>
+                            
+                            <p class="toss-instructions-text" id="toss-instructions">
+                                Hover and Click coin to generate quantum toss outcome
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" class="btn-primary-hud" id="btn-start-match" disabled>
+                    <span class="btn-hud-glow"></span>
+                    <span class="btn-hud-content">INITIALIZE CORE SESSION</span>
+                </button>
+            </div>
+        </main>
+
+        <!-- SCREEN 2: SCIFI TELEMETRY GAME HUD -->
+        <main class="screen" id="match-screen">
+            <div class="hud-dashboard-grid">
+                
+                <!-- COLUMN A: LEFT SIDE STATS TELEMETRY -->
+                <div class="hud-col hud-col-left">
+                    
+                    <!-- Batter Telemetry Box -->
+                    <div class="glass-panel hud-panel widget-batter-stats">
+                        <div class="laser-scanner-line"></div>
+                        <div class="panel-tag">BATTER TELEMETRY</div>
+                        
+                        <div class="batters-telemetry-list">
+                            <!-- Striker details -->
+                            <div class="telemetry-batter-card active-striker" id="striker-row">
+                                <div class="batter-header">
+                                    <div class="name-box">
+                                        <span class="pulse-emerald">●</span>
+                                        <span class="tele-name" id="striker-name">Batter 1</span>
+                                    </div>
+                                    <div class="score-box" id="striker-score-tele">0</div>
+                                </div>
+                                <div class="telemetry-bar-outer">
+                                    <div class="telemetry-bar-inner" id="striker-bar-fill" style="width: 0%"></div>
+                                </div>
+                                <div class="telemetry-stat-row">
+                                    <span>BALLS: <strong id="striker-balls">0</strong></span>
+                                    <span>4s: <strong id="striker-fours">0</strong> / 6s: <strong id="striker-sixes">0</strong></span>
+                                    <span>SR: <strong id="striker-sr" class="mono">0.0</strong></span>
+                                </div>
+                            </div>
+
+                            <!-- Non-striker details -->
+                            <div class="telemetry-batter-card" id="nonstriker-row">
+                                <div class="batter-header">
+                                    <div class="name-box">
+                                        <span class="pulse-grey">●</span>
+                                        <span class="tele-name" id="nonstriker-name">Batter 2</span>
+                                    </div>
+                                    <div class="score-box" id="nonstriker-score-tele">0</div>
+                                </div>
+                                <div class="telemetry-bar-outer">
+                                    <div class="telemetry-bar-inner" id="nonstriker-bar-fill" style="width: 0%"></div>
+                                </div>
+                                <div class="telemetry-stat-row">
+                                    <span>BALLS: <strong id="nonstriker-balls">0</strong></span>
+                                    <span>4s: <strong id="nonstriker-fours">0</strong> / 6s: <strong id="nonstriker-sixes">0</strong></span>
+                                    <span>SR: <strong id="nonstriker-sr" class="mono">0.0</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gauges & Progress Meters Panel -->
+                    <div class="glass-panel hud-panel widget-gauges">
+                        <div class="laser-scanner-line"></div>
+                        <div class="panel-tag">RATE ANALYTICS</div>
+                        
+                        <div class="gauges-flex">
+                            
+                            <!-- Run Rate Progress Circle -->
+                            <div class="gauge-card">
+                                <div class="svg-gauge-wrapper">
+                                    <svg viewBox="0 0 100 100" class="gauge-svg">
+                                        <circle class="gauge-bg" cx="50" cy="50" r="40"></circle>
+                                        <circle class="gauge-progress" id="gauge-crr-progress" stroke-dasharray="251.2" stroke-dashoffset="251.2" cx="50" cy="50" r="40"></circle>
+                                    </svg>
+                                    <div class="gauge-content">
+                                        <span class="gauge-val" id="tele-crr">0.00</span>
+                                        <span class="gauge-label">CRR</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Required Rate Progress Circle -->
+                            <div class="gauge-card" id="rrr-gauge-card" style="opacity:0.3;">
+                                <div class="svg-gauge-wrapper">
+                                    <svg viewBox="0 0 100 100" class="gauge-svg">
+                                        <circle class="gauge-bg" cx="50" cy="50" r="40"></circle>
+                                        <circle class="gauge-progress" id="gauge-rrr-progress" stroke-dasharray="251.2" stroke-dashoffset="251.2" cx="50" cy="50" r="40"></circle>
+                                    </svg>
+                                    <div class="gauge-content">
+                                        <span class="gauge-val" id="tele-rrr">0.00</span>
+                                        <span class="gauge-label">RRR</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Partnership Box -->
+                    <div class="glass-panel hud-panel widget-partnership">
+                        <div class="laser-scanner-line"></div>
+                        <div class="panel-tag">PARTNERSHIP TELEMETRY</div>
+                        <div class="partnership-content">
+                            <div class="partnership-meter-header">
+                                <span>TOTAL RUNS</span>
+                                <span class="mono" id="tele-partnership-runs">0 runs</span>
+                            </div>
+                            <div class="telemetry-bar-outer" style="height:8px;">
+                                <div class="telemetry-bar-inner glow-energy" id="partnership-bar-fill" style="width: 0%"></div>
+                            </div>
+                            <div class="partnership-stats">
+                                <span>Balls faced: <strong id="tele-partnership-balls">0</strong></span>
+                                <span>Contrib: <span id="tele-partnership-contrib">0% / 0%</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COLUMN B: CENTER PANEL 3D FLOATING SCOREBOARD -->
+                <div class="hud-col hud-col-center">
+                    
+                    <!-- Live Teams Overview Card -->
+                    <div class="glass-panel hud-panel team-banner-hud">
+                        <div class="team-banner-wrapper">
+                            <div class="team-banner-team">
+                                <div class="team-logo-container" id="logo-team-a"></div>
+                                <span id="center-team-a">IND</span>
+                            </div>
+                            <span class="divider">VS</span>
+                            <div class="team-banner-team">
+                                <div class="team-logo-container" id="logo-team-b"></div>
+                                <span id="center-team-b">AUS</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Floating 3D Scoreboard hologram -->
+                    <div class="glass-panel hologram-scoreboard-card" id="hologram-card">
+                        <div class="laser-scanner-line"></div>
+                        <div class="glow-orb"></div>
+                        
+                        <div class="holo-header">
+                            <div class="holo-header-team">
+                                <div class="team-logo-container mini" id="logo-team-batting"></div>
+                                <span class="team-tag" id="holo-team-batting">INDIA</span>
+                            </div>
+                            <span class="status-dot-pulse">● LIVE TELEMETRY</span>
+                        </div>
+
+                        <div class="holo-score-display">
+                            <div class="score-digits" id="holo-score">0</div>
+                            <div class="wicket-separator">/</div>
+                            <div class="wicket-digits" id="holo-wickets">0</div>
+                        </div>
+
+                        <div class="holo-overs-bar">
+                            OVERS COMPLETED <span class="holo-overs-digits" id="holo-overs">0.0</span> / <span id="holo-max-overs">5</span>
+                        </div>
+
+                        <div class="holo-target-alert" id="holo-target-alert">
+                            <div class="target-title">🎯 TARGET ENCRYPTED: <strong id="holo-target-val">100</strong></div>
+                            <div class="target-summary">
+                                Need <strong id="holo-runs-needed">100</strong> runs off <strong id="holo-balls-remaining">30</strong> deliveries
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bowler Active Stats HUD -->
+                    <div class="glass-panel hud-panel widget-bowler-hud" id="bowler-row">
+                        <div class="laser-scanner-line"></div>
+                        <div class="panel-tag">ACTIVE BOWLER PROFILE</div>
+                        
+                        <div class="bowler-profile-content">
+                            <div class="bowler-id-row">
+                                <span class="bowler-avatar-icon">⚡</span>
+                                <div class="bowler-details">
+                                    <span class="bowler-label-name" id="bowler-name">Bowler 1</span>
+                                    <span class="bowler-tag-sub">SEAM BALL DELIVERY DATA</span>
+                                </div>
+                            </div>
+                            
+                            <div class="bowler-tele-stats">
+                                <div class="bowler-stat-pill">
+                                    <span class="lbl">OVERS</span>
+                                    <span class="val" id="bowler-overs">0.0</span>
+                                </div>
+                                <div class="bowler-stat-pill">
+                                    <span class="lbl">MAIDENS</span>
+                                    <span class="val" id="bowler-maidens">0</span>
+                                </div>
+                                <div class="bowler-stat-pill">
+                                    <span class="lbl">RUNS</span>
+                                    <span class="val" id="bowler-runs">0</span>
+                                </div>
+                                <div class="bowler-stat-pill">
+                                    <span class="lbl">WICKETS</span>
+                                    <span class="val" id="bowler-wickets" style="color:var(--primary-magenta);">0</span>
+                                </div>
+                                <div class="bowler-stat-pill">
+                                    <span class="lbl">ECONOMY</span>
+                                    <span class="val" id="bowler-econ">0.00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COLUMN C: RIGHT SIDE AI OS WIDGETS -->
+                <div class="hud-col hud-col-right">
+                    
+                    <!-- AI Assistant Panel (JARVIS-like text/waveform) -->
+                    <div class="glass-panel hud-panel widget-ai-assistant">
+                        <div class="laser-scanner-line"></div>
+                        <div class="panel-tag">AI COMMENTARY DECK</div>
+                        
+                        <div class="ai-core">
+                            <div class="ai-orb-ring">
+                                <div class="ai-orb-core"></div>
+                            </div>
+                            <div class="ai-info-meta">
+                                <span class="ai-name">ANALYST_AI</span>
+                                <span class="ai-status">ACTIVE DATA STREAMS</span>
+                            </div>
+                        </div>
+
+                        <!-- Commentary terminal printing -->
+                        <div class="ai-commentary-terminal">
+                            <div class="terminal-feed" id="terminal-feed-messages">
+                                <p class="sys-msg">> System initialized. Ready to record score event...</p>
+                            </div>
+                        </div>
+
+                        <!-- Voice Waveform simulation canvas -->
+                        <div class="waveform-container">
+                            <canvas id="waveform-canvas" height="40"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Over History Timeline Bubbles -->
+                    <div class="glass-panel hud-panel widget-timeline">
+                        <div class="laser-scanner-line"></div>
+                        <div class="panel-tag">CURRENT OVER TELEMETRY</div>
+                        <div class="timeline-hud-body">
+                            <div class="timeline-header-hud">
+                                <span id="timeline-over-counter">OVER 1</span>
+                                <span class="status-scan-label">SCANNING INDEX</span>
+                            </div>
+                            <div class="timeline-bubbles-row" id="timeline-balls-container">
+                                <span class="text-muted" style="font-size:0.75rem;">Waiting for first ball...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Extras and History Stats -->
+                    <div class="glass-panel hud-panel widget-extras-hud">
+                        <div class="laser-scanner-line"></div>
+                        <div class="panel-tag">MATCH EXTRAS SUMMARY</div>
+                        <div class="extras-hud-grid">
+                            <div class="extra-stat-item">
+                                <span class="lbl">WIDE (WD)</span>
+                                <span class="val" id="extra-wd-val">0</span>
+                            </div>
+                            <div class="extra-stat-item">
+                                <span class="lbl">NO BALL (NB)</span>
+                                <span class="val" id="extra-nb-val">0</span>
+                            </div>
+                            <div class="extra-stat-item">
+                                <span class="lbl">BYES (BY)</span>
+                                <span class="val" id="extra-by-val">0</span>
+                            </div>
+                            <div class="extra-stat-item">
+                                <span class="lbl">LEG BYE (LB)</span>
+                                <span class="val" id="extra-lb-val">0</span>
+                            </div>
+                            <div class="extra-stat-item total" style="grid-column: span 2;">
+                                <span class="lbl">TOTAL EXTRAS CONCEDED</span>
+                                <span class="val" id="extra-total-val">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- BOTTOM SCORING ACTIONS PANEL -->
+            <div class="hud-bottom-action-panel">
+                <div class="hud-panel-bottom-buttons">
+                    <button type="button" class="btn-score-circle" data-run="0" title="Dot Ball">
+                        <span class="num">0</span>
+                        <span class="label">DOT</span>
+                    </button>
+                    <button type="button" class="btn-score-circle" data-run="1" title="Single Run">
+                        <span class="num">1</span>
+                        <span class="label">SING</span>
+                    </button>
+                    <button type="button" class="btn-score-circle" data-run="2" title="Double Runs">
+                        <span class="num">2</span>
+                        <span class="label">DBL</span>
+                    </button>
+                    <button type="button" class="btn-score-circle" data-run="3" title="Triple Runs">
+                        <span class="num">3</span>
+                        <span class="label">TRP</span>
+                    </button>
+                    <button type="button" class="btn-score-circle btn-hud-cyan" data-run="4" title="Boundary Four">
+                        <span class="num">4</span>
+                        <span class="label">FOUR</span>
+                    </button>
+                    <button type="button" class="btn-score-circle btn-hud-gold" data-run="6" title="Maximum Six">
+                        <span class="num">6</span>
+                        <span class="label">SIX</span>
+                    </button>
+                    <button type="button" class="btn-score-circle btn-hud-orange" data-extra="Wd" title="Wide Ball">
+                        <span class="num">WD</span>
+                        <span class="label">WIDE</span>
+                    </button>
+                    <button type="button" class="btn-score-circle btn-hud-orange" data-extra="Nb" title="No Ball">
+                        <span class="num">NB</span>
+                        <span class="label">NOBALL</span>
+                    </button>
+                    <button type="button" class="btn-score-circle btn-hud-orange" data-extra="By" title="Byes">
+                        <span class="num">BY</span>
+                        <span class="label">BYE</span>
+                    </button>
+                    <button type="button" class="btn-score-circle btn-hud-orange" data-extra="Lb" title="Leg Byes">
+                        <span class="num">LB</span>
+                        <span class="label">LBYE</span>
+                    </button>
+                    <button type="button" class="btn-score-circle btn-hud-red" id="btn-wicket-trigger" title="Batter Dismissed">
+                        <span class="num">OUT</span>
+                        <span class="label">WICKET</span>
+                    </button>
+                    <button type="button" class="btn-score-circle btn-hud-grey" id="btn-undo-trigger" title="Revert Last Ball">
+                        <span class="num">↺</span>
+                        <span class="label">UNDO</span>
+                    </button>
+                    <button type="button" class="btn-score-circle btn-hud-grey" id="btn-redo-trigger" title="Redo Reverted Ball">
+                        <span class="num">↻</span>
+                        <span class="label">REDO</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- SCREEN 3: GAME OVER TERMINAL SCORECARD -->
+        <main class="screen" id="game-over-screen">
+            <!-- Winner Hologram Banner -->
+            <div class="glass-panel winner-card hud-panel">
+                <div class="laser-scanner-line"></div>
+                <div class="trophy-glow">⚡🏆⚡</div>
+                <div class="winner-team-name" id="winner-team-name">INDIA WINS!</div>
+                <div class="winner-margin-msg" id="winner-margin-msg">DECISIVE RUN CHASE COMPLETED</div>
+            </div>
+
+            <!-- Scorecard Summary Telemetry -->
+            <div class="glass-panel scorecard-summary-card hud-panel">
+                <div class="laser-scanner-line"></div>
+                <div class="panel-tag">SESSION SCORECARD LOGS</div>
+                
+                <div class="innings-tab-buttons">
+                    <button type="button" class="btn-tab active" id="tab-innings-1">INNINGS 1 LOGS</button>
+                    <button type="button" class="btn-tab" id="tab-innings-2">INNINGS 2 LOGS</button>
+                </div>
+
+                <!-- Scorecard Content -->
+                <div id="scorecard-table-wrapper" style="margin-top:16px;">
+                    <div class="summary-section-title" id="summary-innings-title">India Innings</div>
+                    <table class="scorecard-table" id="summary-batting-table">
+                        <thead>
+                            <tr>
+                                <th>BATTER</th>
+                                <th class="num">R</th>
+                                <th class="num">B</th>
+                                <th class="num">4S</th>
+                                <th class="num">6S</th>
+                                <th class="num">SR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dynamic rows -->
+                        </tbody>
+                    </table>
+
+                    <div class="summary-section-title">Bowling Summary</div>
+                    <table class="scorecard-table" id="summary-bowling-table">
+                        <thead>
+                            <tr>
+                                <th>BOWLER</th>
+                                <th class="num">O</th>
+                                <th class="num">M</th>
+                                <th class="num">R</th>
+                                <th class="num">W</th>
+                                <th class="num">ECON</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dynamic rows -->
+                        </tbody>
+                    </table>
+
+                    <div class="match-meta-info" id="summary-meta-box">
+                        <div class="meta-row">
+                            <span class="meta-label">CONCEDED EXTRAS:</span>
+                            <span class="meta-value" id="summary-extras">0 (w 0, nb 0, b 0, lb 0)</span>
+                        </div>
+                        <div class="meta-row">
+                            <span class="meta-label text-bold">TOTAL MATRIX SCORE:</span>
+                            <span class="meta-value text-bold" id="summary-total-score">120/4 (5.0 overs)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Restart Button -->
+            <button type="button" class="btn-primary-hud" id="btn-restart-game">
+                <span class="btn-hud-glow"></span>
+                <span class="btn-hud-content">INITIALIZE NEW MATCH CYCLE</span>
+            </button>
+        </main>
+
+        <!-- FOOTER BAR -->
+        <footer class="credits-footer">
+            SYS_OPERATIONS // DEEP_SPACE_SPORTS_BROADCASTING &copy; 2035
+        </footer>
+    </div>
+
+    <!-- MODAL 1: CHOOSE OPENERS DEPLOYMENT -->
+    <div class="modal-overlay" id="openers-modal">
+        <div class="glass-panel modal-content hud-panel">
+            <div class="laser-scanner-line"></div>
+            <h2 class="modal-title">DEPLOY <span style="color: var(--primary-cyan);">LINEUP</span></h2>
+            <p class="input-label" style="font-size:0.7rem; margin-bottom:12px;">Configure opening batters and opening bowler streams</p>
+            
+            <div class="input-group">
+                <label class="input-label">STRIKER BATTER</label>
+                <input type="text" id="opener-striker-input" class="input-field" placeholder="Batter 1" value="Batter 1" autocomplete="off">
+            </div>
+            
+            <div class="input-group" style="margin-top:12px;">
+                <label class="input-label">NON-STRIKER BATTER</label>
+                <input type="text" id="opener-nonstriker-input" class="input-field" placeholder="Batter 2" value="Batter 2" autocomplete="off">
+            </div>
+
+            <div class="input-group" style="margin-top:12px;">
+                <label class="input-label">OPENING SEAM BOWLER</label>
+                <input type="text" id="opener-bowler-input" class="input-field" placeholder="Bowler 1" value="Bowler 1" autocomplete="off">
+            </div>
+
+            <button type="button" class="btn-primary-hud" id="btn-confirm-openers" style="margin-top: 18px;">
+                <span class="btn-hud-glow"></span>
+                <span class="btn-hud-content">CONFIRM LINEUP DEPLOYMENT</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL 2: WICKET ANALYSIS -->
+    <div class="modal-overlay" id="wicket-modal">
+        <div class="glass-panel modal-content hud-panel">
+            <div class="laser-scanner-line"></div>
+            <h2 class="modal-title">DISMISSAL <span style="color: var(--accent-crimson);">ANALYSIS</span></h2>
+            <div class="select-options-list dismissal-grid" style="margin: 12px 0;">
+                <button type="button" class="select-option-btn" data-type="Bowled">BOWLED</button>
+                <button type="button" class="select-option-btn" data-type="Caught">CAUGHT</button>
+                <button type="button" class="select-option-btn" data-type="LBW">LBW</button>
+                <button type="button" class="select-option-btn" data-type="Run Out">RUN OUT</button>
+                <button type="button" class="select-option-btn" data-type="Stumped">STUMPED</button>
+                <button type="button" class="select-option-btn" data-type="Others">OTHERS</button>
+            </div>
+
+            <!-- New Batsman name block -->
+            <div class="input-group" id="new-batsman-block" style="margin-top: 8px;">
+                <label class="input-label" for="new-batsman-name">REPLACEMENT BATTER</label>
+                <input type="text" id="new-batsman-name" class="input-field" placeholder="New Batter" autocomplete="off">
+            </div>
+
+            <!-- Run out runner selection (only displays if Run Out chosen) -->
+            <div class="input-group" id="runout-dismissal-block" style="display:none; margin-top: 8px;">
+                <label class="input-label">TARGET DISMISSED BATTER</label>
+                <div style="display:flex; gap:8px; margin-top:4px;">
+                    <button type="button" class="btn-preset active" id="btn-ro-striker" style="flex:1;">STRIKER</button>
+                    <button type="button" class="btn-preset" id="btn-ro-nonstriker" style="flex:1;">NON-STRIKER</button>
+                </div>
+            </div>
+
+            <button type="button" class="btn-primary-hud" id="btn-confirm-wicket" style="margin-top: 18px;">
+                <span class="btn-hud-glow"></span>
+                <span class="btn-hud-content">RECORD WICKET EVENT</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL 3: INNINGS TRANSITION SPLASH -->
+    <div class="modal-overlay" id="innings-transition-modal">
+        <div class="glass-panel modal-content hud-panel" style="text-align: center; gap: 20px;">
+            <div class="laser-scanner-line"></div>
+            <h2 class="modal-title" style="color: var(--primary-cyan);">INNINGS_01 COMPLETE</h2>
+            <div class="scoreboard-lcd" style="background: rgba(0,0,0,0.3); border-radius: 16px; padding: 16px; border:1px solid rgba(255,255,255,0.05);">
+                <div class="lcd-main-row" style="justify-content: center; gap: 12px; display:flex; align-items:center;">
+                    <span id="trans-team-name" style="font-weight: 800; font-size:1.4rem;">IND</span>
+                    <span id="trans-score" style="font-family: var(--font-mono); font-size: 1.6rem; font-weight:800; color:var(--accent-gold);">120/4</span>
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top:8px;">
+                    Overs recorded: <span id="trans-overs" style="font-family:var(--font-mono);">5.0</span>
+                </div>
+            </div>
+            
+            <p id="trans-chase-msg" style="font-weight: 600; font-size:0.9rem; color:var(--text-main);">
+                Australia needs 121 runs to win in 5 overs (Req. RR: 24.20)
+            </p>
+
+            <div class="input-group" style="text-align: left;">
+                <label class="input-label">RUN CHASE STRIKER</label>
+                <input type="text" id="innings2-striker" class="input-field" placeholder="Batter 1" value="Batter 1" autocomplete="off">
+            </div>
+            <div class="input-group" style="text-align: left; margin-top:8px;">
+                <label class="input-label">RUN CHASE NON-STRIKER</label>
+                <input type="text" id="innings2-nonstriker" class="input-field" placeholder="Batter 2" value="Batter 2" autocomplete="off">
+            </div>
+            <div class="input-group" style="text-align: left; margin-top:8px;">
+                <label class="input-label">RUN CHASE OPEN BOWLER</label>
+                <input type="text" id="innings2-bowler" class="input-field" placeholder="Bowler 1" value="Bowler 1" autocomplete="off">
+            </div>
+
+            <button type="button" class="btn-primary-hud" id="btn-start-innings2" style="margin-top:10px;">
+                <span class="btn-hud-glow"></span>
+                <span class="btn-hud-content">INITIALIZE RUN CHASE</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL 4: RENAME PLAYER MODAL -->
+    <div class="modal-overlay" id="rename-modal">
+        <div class="glass-panel modal-content hud-panel">
+            <div class="laser-scanner-line"></div>
+            <h2 class="modal-title">UPDATE <span id="rename-title-role">Player</span> PROFILE</h2>
+            <div class="input-group">
+                <label class="input-label" for="rename-player-name">REASSIGN NAME</label>
+                <input type="text" id="rename-player-name" class="input-field" autocomplete="off">
+            </div>
+            <div style="display:flex; gap:12px; margin-top:16px;">
+                <button type="button" class="btn-preset" id="btn-cancel-rename" style="flex:1;">CANCEL</button>
+                <button type="button" class="btn-primary-hud" id="btn-save-rename" style="flex:1; box-shadow:none;">
+                    <span class="btn-hud-content" style="padding:10px;">SAVE PROFILE</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load scripts -->
+    <script src="sound.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
